@@ -16,6 +16,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->libdir . '/filelib.php');
+
 /**
  * Library of extra functions for the dialogue module not part of the standard add-on module API set
  * but used by scripts in the mod/dialogue folder
@@ -500,7 +502,7 @@ class dialogue_message implements renderable {
     }
 
     public function send() {
-        global $DB;
+        global $DB, $CFG;
 
         // add author to participants and save
         $this->conversation->add_participant($this->_authorid);
@@ -1140,7 +1142,7 @@ class dialogue_conversation extends dialogue_message {
                 empty($this->_subject) or empty($this->_body));
 
         if ($incomplete) {
-            throw new moodle_exception("Incomplete conversation cannot send!");
+            throw new moodle_exception("Incomplete conversation cannot send!: " . $this->_conversationid);
         }
 
         if (!empty($this->_bulkopenrule)) {
