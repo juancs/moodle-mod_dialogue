@@ -295,7 +295,7 @@ class message implements \renderable {
     }
 
     public function send() {
-        global $DB;
+        global $DB,$CFG;
 
         // Add author to participants and save.
         $this->conversation->add_participant($this->_authorid);
@@ -319,7 +319,15 @@ class message implements \renderable {
         $url = new \moodle_url('/mod/dialogue/view.php', array('id' => $cm->id));
         $a->url = $url->out(false);
 
-        $posthtml = get_string('messageapibasicmessage', 'dialogue', $a);
+        $posthtml = '<div class="navbar">' .
+                '<a target="_blank" href="'.$CFG->wwwroot.'/course/view.php?id='.$course->id.'">'.$course->shortname.'</a> &raquo; ' .
+                '<a target="_blank" href="'.$CFG->wwwroot.'/mod/dialogue/index.php?id='.$course->id.'">' . get_string('modulenameplural', 'dialogue') . '</a> &raquo; ' .
+                '<a target="_blank" href="'.$CFG->wwwroot.'/mod/dialogue/view.php?id='.$cm->id.'">'.format_string($this->dialogue->activityrecord->name,true).'</a> &raquo; ' .
+                '<a target="_blank" href="'.$CFG->wwwroot.'/mod/dialogue/conversation.php?id='.$cm->id.'&action=view&conversationid='.$this->conversation->conversationid . '">' . format_string($this->conversation->subject, true) .'</a>' .
+                '</div>';
+        $posthtml .= get_string('messageapibasicmessage', 'dialogue', $a);
+        $posthtml .= '<br /><b>' . get_string('message', 'message') . "</b>:<br /><br />" . $this->bodyhtml;
+
         $posttext = html_to_text($posthtml);
         $smallmessage = get_string('messageapismallmessage', 'dialogue', fullname($userfrom));
 
