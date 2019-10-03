@@ -152,7 +152,7 @@ body.path-mod-dialogue #region-main button,
 body.path-mod-dialogue #region-main input,
 body.path-mod-dialogue #region-main select,
 body.path-mod-dialogue #region-main textarea {
-  margin: 0;
+  /*margin: 0;*/
   font-size: 100%;
   vertical-align: middle;
 }
