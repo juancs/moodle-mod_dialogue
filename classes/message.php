@@ -213,10 +213,12 @@ class message implements \renderable {
         $this->_body = $body;
         $this->_bodyformat = $format;
 
-        if ($format == FORMAT_HTML and isset($itemid)) {
+        /// juan: Hay que tener en cuenta el markdown.
+        if (in_array($format, [FORMAT_HTML, FORMAT_MARKDOWN]) and isset($itemid)) {
             $this->_bodydraftid = $itemid;
             $this->_body = file_rewrite_urls_to_pluginfile($this->_body, $this->_bodydraftid);
         }
+        /// juan: fin
     }
 
     public function set_attachmentsdraftid($attachmentsdraftitemid) {
@@ -282,12 +284,10 @@ class message implements \renderable {
         }
         // Deal with embedded files.
         if ($this->_bodydraftid) {
-
             file_save_draft_area_files($this->_bodydraftid, $context->id, 'mod_dialogue', 'message', $this->_messageid);
         }
         // Deal with attached files.
         if ($this->_attachmentsdraftid) {
-
             file_save_draft_area_files($this->_attachmentsdraftid, $context->id, 'mod_dialogue', 'attachment', $this->_messageid);
         }
 
